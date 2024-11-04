@@ -123,7 +123,7 @@ Dependencies are managed through two main components:
 1. The wheel package itself (`survey_processing-0.1.2-py3-none-any.whl`)
 2. Additional packages specified in `requirements.txt`
 
-### Configuration
+### Configuration for Databricks Cluster Runtime 15.0 or higher
 Dependencies are configured in `databricks.yml`:
 ```yaml
 libraries:
@@ -164,6 +164,46 @@ This approach provides:
 - Easy version control of dependencies
 - Automated dependency installation
 
+### Configuration for Databricks Cluster Runtime 13.3 (USACE Compliant)
+
+List packages individually
+```yaml
+bundle:
+  name: "survey-processing"
+
+resources:
+  jobs:
+    survey_processing_job:
+      name: "Survey Processing Job"
+      email_notifications:
+        on_success:
+          - "cary.greenwood@nv5.com"
+        on_failure:
+          - "cary.greenwood@nv5.com"
+        no_alert_for_skipped_runs: true
+      job_clusters:
+        - job_cluster_key: "main"
+          new_cluster:
+            spark_version: "13.3.x-scala2.12"
+            node_type_id: "i3.xlarge"
+            num_workers: 1
+      tasks:
+        - task_key: "main_task"
+          job_cluster_key: "main"
+          python_wheel_task:
+            package_name: "survey_processing"
+            entry_point: "main"
+            parameters: ["--date", "2024-11-04", "--region", "US"]
+          libraries:
+            - whl: "dist/survey_processing-0.1.2-py3-none-any.whl"
+            - pypi:
+                package: "python-dotenv>=1.0.0"
+            - pypi:
+                package: "requests>=2.31.0"
+          timeout_seconds: 600
+          retry_on_timeout: true
+          max_retries: 3
+```
 
 ## Preparing and Building Wheel
 
