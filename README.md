@@ -1,17 +1,37 @@
 # Databricks Survey Processing System Controller
 
-This tool automates the end-to-end process of deploying Python packages and jobs to Databricks workspaces. It handles the complete deployment pipeline: building Python wheel packages locally, uploading them to Databricks File System (DBFS), creating or updating job configurations, and managing job execution. The tool is particularly useful for data engineering teams who need to maintain consistent deployment processes across multiple Databricks jobs and packages. When you run the tool, it executes the following steps:
+## Overview
+Python survey processing databricks bundle that is built into a wheel and deployed as a databricks job. This job can be deployed and triggered using the databricks CLI or as an API call.
 
-1. Validates your Databricks connection and environment setup
-2. Lists available clusters and verifies cluster accessibility
-3. Builds your Python package into a wheel file
-4. Creates necessary DBFS directories
-5. Uploads the wheel file and any requirements to DBFS
-6. Deploys additional bundle files to the Databricks workspace
-7. Creates or updates the Databricks job configuration
-8. Initiates the job with specified parameters (if requested)
+This package provides:
+- Automated wheel building and deployment process
+- Configurable job parameters (date and region)
+- Detailed logging and job monitoring
+- Email notifications for job status
+- Retry mechanisms for job reliability
+- CLI commands for deployment and execution
 
-The setup process is straightforward: after cloning the repository, you'll need to configure your Databricks credentials in a `.env` file, install the required dependencies using pip, and install the package in editable mode using uv. This creates a development installation that allows you to modify the source code without reinstalling the package.
+## Key Components
+- **Build Process**: Clean build system using Python wheel packaging
+- **Deployment**: Databricks bundle deployment with validation
+- **Job Configuration**: Customizable job settings via `databricks.yml`
+- **Execution**: CLI commands for job triggering with parameters
+- **Monitoring**: Structured logging and status tracking
+- **Notifications**: Email alerts for job success/failure
+
+## Quick Start
+```bash
+# Build the wheel
+python -m build
+
+# Validate and deploy the bundle
+databricks bundle validate
+databricks bundle deploy
+
+# Run the job
+databricks bundle run survey_processing_job \
+  --python-named-params "date=2024-11-05,region=EU"
+```
 
 ## Features
 
@@ -109,6 +129,104 @@ Use Python's build module to create the wheel package:
 ```bash
 # Build new wheel
 python -m build
+```
+
+### Example build output:
+```
+ carynv5 on RMT-L-292 at ../db_sp_handler  main (++(1) ) is 📦 v0.1.2 via 🐍 pyenv via 🅒 base
+ python -m build
+* Creating isolated environment: venv+pip...
+* Installing packages in isolated environment:
+  - setuptools>=61.0
+* Getting build dependencies for sdist...
+running egg_info
+creating survey_processing.egg-info
+writing survey_processing.egg-info/PKG-INFO
+writing dependency_links to survey_processing.egg-info/dependency_links.txt
+writing entry points to survey_processing.egg-info/entry_points.txt
+writing requirements to survey_processing.egg-info/requires.txt
+writing top-level names to survey_processing.egg-info/top_level.txt
+writing manifest file 'survey_processing.egg-info/SOURCES.txt'
+reading manifest file 'survey_processing.egg-info/SOURCES.txt'
+writing manifest file 'survey_processing.egg-info/SOURCES.txt'
+* Building sdist...
+running sdist
+running egg_info
+writing survey_processing.egg-info/PKG-INFO
+writing dependency_links to survey_processing.egg-info/dependency_links.txt
+writing entry points to survey_processing.egg-info/entry_points.txt
+writing requirements to survey_processing.egg-info/requires.txt
+writing top-level names to survey_processing.egg-info/top_level.txt
+reading manifest file 'survey_processing.egg-info/SOURCES.txt'
+writing manifest file 'survey_processing.egg-info/SOURCES.txt'
+running check
+creating survey_processing-0.1.2
+creating survey_processing-0.1.2/survey_processing
+creating survey_processing-0.1.2/survey_processing.egg-info
+copying files to survey_processing-0.1.2...
+copying README.md -> survey_processing-0.1.2
+copying pyproject.toml -> survey_processing-0.1.2
+copying survey_processing/__init__.py -> survey_processing-0.1.2/survey_processing
+copying survey_processing/main.py -> survey_processing-0.1.2/survey_processing
+copying survey_processing.egg-info/PKG-INFO -> survey_processing-0.1.2/survey_processing.egg-info
+copying survey_processing.egg-info/SOURCES.txt -> survey_processing-0.1.2/survey_processing.egg-info
+copying survey_processing.egg-info/dependency_links.txt -> survey_processing-0.1.2/survey_processing.egg-info
+copying survey_processing.egg-info/entry_points.txt -> survey_processing-0.1.2/survey_processing.egg-info
+copying survey_processing.egg-info/requires.txt -> survey_processing-0.1.2/survey_processing.egg-info
+copying survey_processing.egg-info/top_level.txt -> survey_processing-0.1.2/survey_processing.egg-info
+copying survey_processing.egg-info/SOURCES.txt -> survey_processing-0.1.2/survey_processing.egg-info
+Writing survey_processing-0.1.2/setup.cfg
+Creating tar archive
+removing 'survey_processing-0.1.2' (and everything under it)
+* Building wheel from sdist
+* Creating isolated environment: venv+pip...
+* Installing packages in isolated environment:
+  - setuptools>=61.0
+* Getting build dependencies for wheel...
+running egg_info
+writing survey_processing.egg-info/PKG-INFO
+writing dependency_links to survey_processing.egg-info/dependency_links.txt
+writing entry points to survey_processing.egg-info/entry_points.txt
+writing requirements to survey_processing.egg-info/requires.txt
+writing top-level names to survey_processing.egg-info/top_level.txt
+reading manifest file 'survey_processing.egg-info/SOURCES.txt'
+writing manifest file 'survey_processing.egg-info/SOURCES.txt'
+* Building wheel...
+running bdist_wheel
+running build
+running build_py
+creating build/lib/survey_processing
+copying survey_processing/__init__.py -> build/lib/survey_processing
+copying survey_processing/main.py -> build/lib/survey_processing
+running egg_info
+writing survey_processing.egg-info/PKG-INFO
+writing dependency_links to survey_processing.egg-info/dependency_links.txt
+writing entry points to survey_processing.egg-info/entry_points.txt
+writing requirements to survey_processing.egg-info/requires.txt
+writing top-level names to survey_processing.egg-info/top_level.txt
+reading manifest file 'survey_processing.egg-info/SOURCES.txt'
+writing manifest file 'survey_processing.egg-info/SOURCES.txt'
+installing to build/bdist.macosx-11.1-arm64/wheel
+running install
+running install_lib
+creating build/bdist.macosx-11.1-arm64/wheel
+creating build/bdist.macosx-11.1-arm64/wheel/survey_processing
+copying build/lib/survey_processing/__init__.py -> build/bdist.macosx-11.1-arm64/wheel/./survey_processing
+copying build/lib/survey_processing/main.py -> build/bdist.macosx-11.1-arm64/wheel/./survey_processing
+running install_egg_info
+Copying survey_processing.egg-info to build/bdist.macosx-11.1-arm64/wheel/./survey_processing-0.1.2-py3.12.egg-info
+running install_scripts
+creating build/bdist.macosx-11.1-arm64/wheel/survey_processing-0.1.2.dist-info/WHEEL
+creating '/Users/carynv5/Documents/dev/db_sp_handler/dist/.tmp-rtgukios/survey_processing-0.1.2-py3-none-any.whl' and adding 'build/bdist.macosx-11.1-arm64/wheel' to it
+adding 'survey_processing/__init__.py'
+adding 'survey_processing/main.py'
+adding 'survey_processing-0.1.2.dist-info/METADATA'
+adding 'survey_processing-0.1.2.dist-info/WHEEL'
+adding 'survey_processing-0.1.2.dist-info/entry_points.txt'
+adding 'survey_processing-0.1.2.dist-info/top_level.txt'
+adding 'survey_processing-0.1.2.dist-info/RECORD'
+removing build/bdist.macosx-11.1-arm64/wheel
+Successfully built survey_processing-0.1.2.tar.gz and survey_processing-0.1.2-py3-none-any.whl
 ```
 
 This command will create two files in the `dist/` directory:
