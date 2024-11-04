@@ -4,7 +4,7 @@
 Python survey processing databricks bundle that is built into a wheel and deployed as a databricks job. This job can be deployed and triggered using the databricks CLI or as an API call.
 
 This package provides:
-- Automated wheel building and deployment process
+- Wheel building and deployment process
 - Configurable job parameters (date and region)
 - Detailed logging and job monitoring
 - Email notifications for job status
