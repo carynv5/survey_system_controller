@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "survey_processing"
+version = "0.1.2"
+authors = [
+   { name="Cary Greenwood", email="cary.greenwood@nv5.com" },
+]
+description = "Survey Processing Package"
+requires-python = ">=3.8"
+dependencies = [
+   "pyyaml>=6.0",
+]
+
+[project.scripts]
+survey-processing = "survey_processing.main:main"
