@@ -129,26 +129,57 @@ resources:
           - "failure@example.com"
 ```
 
-## Key Features Explained
+## Preparing and Building Wheel
 
-### Wheel Building
-The tool automatically builds your Python package into a wheel file for deployment:
-```python
-dbx.build_wheel(bundle_path)
+The Python wheel is a built package format that can be easily installed and deployed. Follow these steps to build the wheel:
+
+### 1. Clean Previous Builds
+Remove any existing build artifacts to ensure a clean build:
+```bash
+# Clean previous builds
+rm -rf dist/ build/ *.egg-info/
 ```
 
-### DBFS Upload
-Handles uploading of wheel files and other artifacts to DBFS:
-```python
-dbx.upload_wheel(wheel_path)
+### 2. Build the Wheel
+Use Python's build module to create the wheel package:
+```bash
+# Build new wheel
+python -m build
 ```
 
-### Job Management
-Creates or updates Databricks jobs based on your configuration:
-```python
-dbx.create_or_update_job(bundle_path, wheel_path)
+This command will create two files in the `dist/` directory:
+- `survey_processing-0.1.2.tar.gz` (source distribution)
+- `survey_processing-0.1.2-py3-none-any.whl` (wheel distribution)
+
+### 3. Test Locally
+Before deploying to Databricks, test the wheel installation locally:
+```bash
+# Install the wheel
+pip install dist/survey_processing-0.1.2-py3-none-any.whl
+
+# Test the import and main function
+python -c "import survey_processing; survey_processing.main()"
 ```
 
+### 4. Common Build Issues and Solutions
+
+1. **Multiple Top-Level Packages**
+   - Error: `Multiple top-level packages discovered in a flat-layout`
+   - Solution: Ensure your package structure is correct and remove any unintended packages
+
+2. **Missing Dependencies**
+   - Error: `ModuleNotFoundError` during testing
+   - Solution: Add required dependencies to `pyproject.toml`
+
+3. **Import Errors**
+   - Error: `ImportError` or `ModuleNotFoundError`
+   - Solution: Verify package structure matches import statements
+
+### 5. Build Verification Steps
+1. Check the `dist/` directory contains new wheel file
+2. Verify wheel filename format: `survey_processing-0.1.2-py3-none-any.whl`
+3. Confirm wheel can be installed locally
+4. Test basic functionality before deployment
 
 ## Monitoring and Logs
 
