@@ -112,6 +112,7 @@ resources:
         on_failure:
           - "failure@example.com"
 ```
+See Databricks Cluster Configuration Section.
 
 ## Preparing and Building Wheel
 
