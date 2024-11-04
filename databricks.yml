@@ -17,5 +17,9 @@ resources:
           python_wheel_task:
             package_name: "survey_processing"
             entry_point: "main"
+            parameters: ["--date", "2024-11-04", "--region", "US"]  # Add your parameters here
           libraries:
             - whl: "dist/survey_processing-0.1.2-py3-none-any.whl"
+          timeout_seconds: 600
+          retry_on_timeout: true
+          max_retries: 3
