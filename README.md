@@ -420,12 +420,41 @@ Common issues and solutions:
    - Validate your `databricks.yml` format
    - Confirm cluster availability
 
-## Contributing
 
-1. Fork the repository
-2. Create a feature branch
-3. Submit a pull request
+## Databricks Cluster Configuration
 
-## License
+```yaml
+job_clusters:
+  - job_cluster_key: "main"
+    new_cluster:                       # Creating a new cluster for each job run
+      spark_version: "13.3.x-scala2.12"  # Using Databricks Runtime 13.3
+      node_type_id: "i3.xlarge"          # Using i3.xlarge instance type
+      num_workers: 1                      # Single worker node configuration
+```
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+### New Cluster - Current configuration
+A new cluster is created for each job run
+The cluster will terminate after the job completes
+You're using:
+
+Standard Databricks Runtime (not ML, GPU, or Photon)
+Single worker node (not autoscaling)
+i3.xlarge instance type for both driver and workers
+
+### Use existing cluster
+If you want to save costs or reuse an existing cluster, you could switch to using an existing_cluster_id:
+
+```yaml
+job_clusters:
+  - job_cluster_key: "main"
+    existing_cluster_id: "your-cluster-id-here"  # Use an existing cluster
+Or add autoscaling to the current configuration:
+yamlCopyjob_clusters:
+  - job_cluster_key: "main"
+    new_cluster:
+      spark_version: "13.3.x-scala2.12"
+      node_type_id: "i3.xlarge"
+      autoscale:
+        min_workers: 1
+        max_workers: 3
+```
