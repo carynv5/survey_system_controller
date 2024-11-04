@@ -12,6 +12,8 @@ description = "Survey Processing Package"
 requires-python = ">=3.8"
 dependencies = [
    "pyyaml>=6.0",
+   "wheel",
+   "pip-tools",
 ]
 
 [project.scripts]

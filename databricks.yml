@@ -26,6 +26,7 @@ resources:
             parameters: ["--date", "2024-11-04", "--region", "US"]
           libraries:
             - whl: "dist/survey_processing-0.1.2-py3-none-any.whl"
+            - requirements: "requirements.txt"
           timeout_seconds: 600
           retry_on_timeout: true
           max_retries: 3

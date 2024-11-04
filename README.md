@@ -40,6 +40,7 @@ databricks bundle run survey_processing_job \
 - Job creation and updates
 - Bundle deployment automation
 - Cluster management and validation
+- Dependency management
 - Direct job execution capability
 
 ## Prerequisites
@@ -113,6 +114,56 @@ resources:
           - "failure@example.com"
 ```
 See Databricks Cluster Configuration Section.
+
+
+## Dependencies and Package Management
+
+### Cluster Dependencies
+Dependencies are managed through two main components:
+1. The wheel package itself (`survey_processing-0.1.2-py3-none-any.whl`)
+2. Additional packages specified in `requirements.txt`
+
+### Configuration
+Dependencies are configured in `databricks.yml`:
+```yaml
+libraries:
+  - whl: "dist/survey_processing-0.1.2-py3-none-any.whl"
+  - requirements: "requirements.txt"
+```
+
+This setup:
+- Installs the survey processing wheel package
+- Installs all packages listed in `requirements.txt`
+- Creates a fresh environment for each job run
+- Ensures consistent dependencies across all runs
+
+### Managing Dependencies
+1. Package Dependencies
+   - Update `requirements.txt` with required packages
+   - Use version pinning for production stability
+   ```txt
+   pandas==2.0.0
+   numpy==1.20.0
+   # Add other required packages
+   ```
+
+2. Deployment
+   - Dependencies are installed during job setup
+   - Each job run gets a clean environment
+   - No manual cluster package management needed
+
+3. Updating Dependencies
+   ```bash
+   # After updating requirements.txt
+   databricks bundle deploy
+   ```
+
+This approach provides:
+- Simple dependency management through requirements.txt
+- Consistent environments across job runs
+- Easy version control of dependencies
+- Automated dependency installation
+
 
 ## Preparing and Building Wheel
 
