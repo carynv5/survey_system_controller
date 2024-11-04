@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "survey_processing"
-version = "0.1.2"
+version = "0.1.3"
 authors = [
    { name="Cary Greenwood", email="cary.greenwood@nv5.com" },
 ]

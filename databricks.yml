@@ -11,21 +11,11 @@ resources:
         on_failure:
           - "cary.greenwood@nv5.com"
         no_alert_for_skipped_runs: true
-      job_clusters:
-        - job_cluster_key: "main"
-          new_cluster:
-            spark_version: "13.3.x-scala2.12"
-            node_type_id: "i3.xlarge"
-            num_workers: 1
       tasks:
         - task_key: "main_task"
-          job_cluster_key: "main"
-          python_wheel_task:
-            package_name: "survey_processing"
-            entry_point: "main"
-            parameters: ["--date", "2024-11-04", "--region", "US"]
+          existing_cluster_id: "1030-181954-oxs1wrk2"
           libraries:
-            - whl: "dist/survey_processing-0.1.2-py3-none-any.whl"
+            - whl: "dbfs:/FileStore/jars/4209211d_9f5d_4ea5_9916_430a06eb1195/survey_processing-0.1.3-py3-none-any.whl"
             - pypi:
                 package: "pyyaml>=6.0"
             - pypi:
@@ -36,6 +26,10 @@ resources:
                 package: "python-dotenv>=1.0.0"
             - pypi:
                 package: "requests>=2.31.0"
+          python_wheel_task:
+            package_name: "survey_processing"
+            entry_point: "main"
+            parameters: ["--date", "2024-11-04", "--region", "US"]
           timeout_seconds: 600
           retry_on_timeout: true
           max_retries: 3

@@ -40,6 +40,17 @@ def main():
     """Main entry point for the survey processing job."""
     logger = setup_logging()
     
+    import sys
+    import pkg_resources
+    
+    logger.info("Python Environment Info:")
+    logger.info(f"Python Path: {sys.path}")
+    logger.info(f"Python Version: {sys.version}")
+    
+    logger.info("Installed Packages:")
+    for pkg in pkg_resources.working_set:
+        logger.info(f"  {pkg.key} version {pkg.version}")
+
     try:
         # Log startup information
         logger.info("=" * 80)
