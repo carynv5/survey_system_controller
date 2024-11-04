@@ -49,31 +49,6 @@ DATABRICKS_ACCESS_TOKEN=<your-access-token>
    uv sync
    ```
 
-## Usage
-
-### Basic Deployment
-
-```python
-from databricks_manager import DatabricksManager
-
-dbx = DatabricksManager()
-dbx.deploy_bundle("path/to/your/bundle")
-```
-
-### Running a Job
-
-```python
-parameters = {
-    "date": "2024-03-01",
-    "region": "NA"
-}
-
-dbx.run_job(
-    job_name="Survey Processing Job",
-    parameters=parameters
-)
-```
-
 ## Project Structure
 
 Your Databricks bundle should follow this structure:
@@ -83,7 +58,6 @@ your_bundle/
 ├── databricks.yml     # Job configuration
 ├── requirements.txt   # Package dependencies
 ├── pyproject.toml     # Package configuration
-├── setup.py           # Package setup file
 └── src/               # Source code
 ```
 
@@ -100,17 +74,7 @@ This then allows you to dump all pyproject.toml requirements to a requirements.t
 uv pip compile pyproject.toml -o requirements.txt
 ```
 
-The included `db_sp_handler` folder in this repository is an example Databricks bundle that processes survey data. You can use this as a template or replace it entirely with your own bundle. To use your own bundle:
-
-1. Ensure your bundle follows the structure above
-2. Replace the bundle path in the deployment command:
-   ```python
-   # Instead of using the example bundle:
-   # dbx.deploy_bundle("db_sp_handler")
-   
-   # Use your own bundle:
-   dbx.deploy_bundle("path/to/your/bundle")
-   ```
+This repository is an example Databricks bundle that processes survey data. You can use this as a template or replace it entirely with your own bundle. To use your own bundle:
 
 ## Configuration
 
@@ -180,6 +144,75 @@ python -c "import survey_processing; survey_processing.main()"
 2. Verify wheel filename format: `survey_processing-0.1.2-py3-none-any.whl`
 3. Confirm wheel can be installed locally
 4. Test basic functionality before deployment
+
+## Deploying to Databricks
+
+### 1. Validate Bundle Configuration
+Before deploying, validate your bundle configuration:
+```bash
+databricks bundle validate
+```
+
+Successful validation will show output similar to:
+```
+Name: survey-processing
+Target: default
+Workspace:
+  User: cary.greenwood@nv5.com
+  Path: /Workspace/Users/cary.greenwood@nv5.com/.bundle/survey-processing/default
+Validation OK!
+```
+
+### 2. Deploy Bundle
+Deploy your package to Databricks:
+```bash
+databricks bundle deploy
+```
+
+Successful deployment will show:
+```
+Uploading survey_processing-0.1.2-py3-none-any.whl...
+Uploading bundle files to /Workspace/Users/cary.greenwood@nv5.com/.bundle/survey-processing/default/files...
+Deploying resources...
+Updating deployment state...
+Deployment complete!
+```
+
+### 3. Run the Job
+Execute the deployed job with parameters:
+```bash
+databricks bundle run survey_processing_job \
+  --python-named-params "date=2024-11-05,region=EU"
+```
+
+### Common Deployment Issues and Solutions
+
+1. **Validation Errors**
+   - Check your `databricks.yml` configuration
+   - Verify workspace permissions
+   - Ensure bundle name matches configuration
+
+2. **Upload Failures**
+   - Verify wheel file exists in `dist/` directory
+   - Check workspace path permissions
+   - Confirm wheel filename matches `databricks.yml`
+
+3. **Job Run Errors**
+   - Verify parameter names and formats
+   - Check job cluster configuration
+   - Review workspace resource limits
+
+### Deployment Tips
+1. Always run `databricks bundle validate` before deployment
+2. Use `--verbose` flag for detailed deployment logs:
+   ```bash
+   databricks bundle deploy --verbose
+   ```
+3. Monitor deployment progress in the Databricks workspace
+4. Keep track of wheel versions and updates
+
+[Continue with rest of README...]
+
 
 ## Monitoring and Logs
 
