@@ -1,5 +1,44 @@
 # Databricks Survey Processing System Controller
 
+1. [Overview](#overview)
+2. [Key Components](#key-components)
+3. [Quick Start](#quick-start)
+4. [Features](#features)
+5. [Prerequisites](#prerequisites)
+6. [Environment Setup](#environment-setup)
+7. [Installation](#installation)
+8. [Project Structure](#project-structure)
+9. [Configuration](#configuration)
+   - [databricks.yml Example](#databricksyml-example)
+10. [Dependencies and Package Management](#dependencies-and-package-management)
+    - [Cluster Dependencies](#cluster-dependencies)
+    - [Configuration for Databricks Cluster Runtime 15.0 or higher](#configuration-for-databricks-cluster-runtime-150-or-higher)
+    - [Managing Dependencies](#managing-dependencies)
+    - [Configuration for Databricks Cluster Runtime 13.3 (USACE Compliant)](#configuration-for-databricks-cluster-runtime-133-usace-compliant)
+11. [Preparing and Building Wheel](#preparing-and-building-wheel)
+    - [Clean Previous Builds](#1-clean-previous-builds)
+    - [Build the Wheel](#2-build-the-wheel)
+    - [Test Locally](#3-test-locally)
+    - [Common Build Issues and Solutions](#4-common-build-issues-and-solutions)
+    - [Build Verification Steps](#5-build-verification-steps)
+12. [Deploying to Databricks](#deploying-to-databricks)
+    - [Validate Bundle Configuration](#1-validate-bundle-configuration)
+    - [Deploy Bundle](#2-deploy-bundle)
+    - [Run the Job](#3-run-the-job)
+    - [Common Deployment Issues and Solutions](#common-deployment-issues-and-solutions)
+    - [Deployment Tips](#deployment-tips)
+13. [Monitoring and Logs](#monitoring-and-logs)
+    - [Example Job Output](#example-job-output)
+    - [Understanding the Log Output](#understanding-the-log-output)
+    - [Viewing Job Runs](#viewing-job-runs)
+14. [Error Handling](#error-handling)
+15. [Best Practices](#best-practices)
+16. [Troubleshooting](#troubleshooting)
+17. [Databricks Cluster Configuration](#databricks-cluster-configuration)
+    - [New Cluster - Current Configuration](#new-cluster---current-configuration)
+    - [Use Existing Cluster](#use-existing-cluster)
+
+
 ## Overview
 Python survey processing databricks bundle that is built into a wheel and deployed as a databricks job. This job can be deployed and triggered using the databricks CLI or as an API call.
 
@@ -18,6 +57,7 @@ This package provides:
 - **Execution**: CLI commands for job triggering with parameters
 - **Monitoring**: Structured logging and status tracking
 - **Notifications**: Email alerts for job success/failure
+
 
 ## Quick Start
 ```bash
